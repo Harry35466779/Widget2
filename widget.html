@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Investment Opportunities</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,500&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      background: #fff;
+      font-family: 'Roboto', Arial, sans-serif;
+      color: #1a1a1a;
+      height: 100%; overflow: hidden;
+    }
+    .widget-container {
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 800px;
+      margin: 56px auto;
+    }
+    .mode-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    .toggle-label {
+      font-size: 16px;
+      font-weight: 500;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px; height: 26px;
+      margin: 0 12px;
+    }
+    .switch input {
+      opacity: 0; width: 0; height: 0;
+    }
+    .slider-switch {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #e6f7fa;
+      border-radius: 26px;
+      transition: background 0.2s;
+    }
+    .slider-switch::before {
+      position: absolute;
+      content: "";
+      height: 22px; width: 22px;
+      left: 2px; bottom: 2px;
+      background: #00a2bd;
+      border-radius: 50%;
+      transition: transform 0.2s;
+      box-shadow: 0 1.5px 4px rgba(0,34,40,0.12);
+    }
+    .switch input:checked + .slider-switch {
+      background: #00a2bd;
+    }
+    .switch input:checked + .slider-switch::before {
+      transform: translateX(24px);
+      background: #fff;
+    }
+    .content-paragraph {
+      font-size: 18px;
+      line-height: 1.7;
+      color: #18344a;
+      margin: 16px 0;
+      min-height: 60px;
+    }
+    .formula {
+      font-size: 20px;
+      line-height: 1.4;
+      text-align: center;
+      margin: 24px 0;
+      color: #222;
+      font-family: 'Roboto Condensed', Arial, sans-serif;
+      min-height: 30px;
+    }
+    em { font-style: italic; }
+  </style>
+</head>
+<body>
+
+  <div class="widget-container">
+    <div class="mode-toggle">
+      <span class="toggle-label">Simplified</span>
+      <label class="switch">
+        <!-- default to Detailed -->
+        <input type="checkbox" id="modeSwitch" checked>
+        <span class="slider-switch"></span>
+      </label>
+      <span class="toggle-label">Detailed</span>
+    </div>
+
+    <!-- simplified view (hidden by default) -->
+    <div id="simplifiedContent" style="display: none;">
+      <p class="content-paragraph">
+        AI’s investment potential can be summarized with three core levers: accuracy, speed and capital efficiency.
+      </p>
+      <p class="formula">
+        Expected Return = Model Accuracy × Speed × Capital Efficiency
+      </p>
+      <p class="content-paragraph">
+        This concise formula shows why leading models like GPT-4 and Claude outperform: they combine precise predictions, rapid response times and lean resource usage. Firms that excel on all three dimensions are positioned to deliver strong, compounding returns.
+      </p>
+    </div>
+
+    <!-- detailed view (visible by default) -->
+    <div id="detailedContent" style="display: block;">
+      <p class="content-paragraph">
+        Investment returns from advanced AI can be expressed as the time-integral of training momentum against loss gradients.
+      </p>
+      <p class="formula">
+        E[R] = ∫<sub>0</sub><sup>T</sup> α(t) · ∇<sub>θ</sub>L(θ, x<sub>t</sub>) dt
+      </p>
+      <p class="content-paragraph">
+        In this view, α(t) is capital-adjusted training momentum and L(θ, x<sub>t</sub>) the instantaneous loss on incoming data. The integral captures how data diversity, compute efficiency and deployment latency interact over time. Treating fine-tuning as dynamic capital allocation under uncertainty allows investors to redefine alpha and gain a strategic edge.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const toggle = document.getElementById('modeSwitch');
+    const simple = document.getElementById('simplifiedContent');
+    const detail = document.getElementById('detailedContent');
+    const speed = 10; // ms per character
+
+    function typeNodeWithText(node, text, callback) {
+      node.innerHTML = '';
+      let i = 0;
+      function typeChar() {
+        node.innerHTML = text.slice(0, i);
+        i++;
+        if (i <= text.length) {
+          setTimeout(typeChar, speed);
+        } else if (callback) {
+          callback();
+        }
+      }
+      typeChar();
+    }
+
+    function typeSequential(container) {
+      const nodes = Array.from(container.querySelectorAll('.content-paragraph, .formula'));
+      const texts = nodes.map(n => n.innerHTML);
+      nodes.forEach(n => n.innerHTML = '');
+      function next(idx) {
+        if (idx >= nodes.length) return;
+        typeNodeWithText(nodes[idx], texts[idx], () => next(idx + 1));
+      }
+      next(0);
+    }
+
+    toggle.addEventListener('change', () => {
+      if (toggle.checked) {
+        simple.style.display = 'none';
+        detail.style.display = 'block';
+        typeSequential(detail);
+      } else {
+        detail.style.display = 'none';
+        simple.style.display = 'block';
+        typeSequential(simple);
+      }
+    });
+
+    window.addEventListener('load', () => {
+      // start with Detailed
+      simple.style.display = 'none';
+      detail.style.display = 'block';
+      typeSequential(detail);
+    });
+  </script>
+
+</body>
+</html>
